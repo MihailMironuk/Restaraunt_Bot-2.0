@@ -8,6 +8,7 @@ from handlers.echo import echo_router
 from handlers.food import restaurant_router
 from handlers.survey import survey_router
 from handlers.picture import picture_router
+from parser.crawler import HouseKgCrawler
 
 
 async def on_startup(bot: Bot) -> None:

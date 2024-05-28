@@ -9,12 +9,12 @@ class Database:
     async def create_tables(self) -> None:
         async with aiosqlite.connect(self.path) as db:
             await db.execute(Queries.CREATE_SURVEY_TABLE)
-            await db.execute(Queries.DROP_COUNTRIES_TABLE)
-            await db.execute(Queries.CREATE_COUNTRIES_TABLE)
-            await db.execute(Queries.DROP_FOOD_TABLE)
-            await db.execute(Queries.CREATE_FOOD_TABLE)
-            await db.execute(Queries.POPULATE_COUNTRIES)
-            await db.execute(Queries.POPULATE_FOOD)
+            await db.execute(Queries.DROP_CATEGORIES_TABLE)
+            await db.execute(Queries.DROP_DISHES_TABLE)
+            await db.execute(Queries.CREATE_CATEGORIES_TABLE)
+            await db.execute(Queries.CREATE_DISHES_TABLE)
+            await db.execute(Queries.POPULATE_CATEGORIES)
+            await db.execute(Queries.POPULATE_DISHES)
             await db.commit()
 
     async def execute(self, query: str, params: tuple | None = None) -> None:

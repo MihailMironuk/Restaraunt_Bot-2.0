@@ -16,6 +16,5 @@ async def set_menu():
         types.BotCommand(command="start", description="Начало"),
         types.BotCommand(command="picture", description="Картинка"),
         types.BotCommand(command="review", description="Пройдите опрос"),
-        types.BotCommand(command="menu", description="Наше меню"),
-        types.BotCommand(command="parser", description="Парсер")
+        types.BotCommand(command="menu", description="Наше меню")
     ])

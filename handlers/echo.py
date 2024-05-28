@@ -9,5 +9,4 @@ async def echo(message: types.Message):
     /start - начало
     /picture - картинка
     /review - опрос
-    /menu - меню
-    /parser - парсер""")
+    /menu - меню""")

@@ -3,48 +3,46 @@ from aiogram.filters import Command
 from config import database
 from pprint import pprint
 
-food_router = Router()
+restaurant_router = Router()
 
 
-@food_router.message(Command("menu"))
+@restaurant_router.message(Command("menu"))
 async def show_menu(message: types.Message):
     kb = types.ReplyKeyboardMarkup(
         keyboard=[
             [
-                types.KeyboardButton(text="Пицца"),
-                types.KeyboardButton(text="Паста")
+                types.KeyboardButton(text="бургеры"),
+                types.KeyboardButton(text="мясо по-итальянски")
             ],
             [
-                types.KeyboardButton(text="Салат"),
+                types.KeyboardButton(text="шашлычки"),
 
             ]
         ],
         resize_keyboard=True
     )
-    await message.answer("Выберите из списка блюд", reply_markup=kb)
+    await message.answer("Выберите категорию блюда кнопой справа", reply_markup=kb)
 
 
-food_country = ("Америка", "Италия", "Норвегия")
+dish_categories = ("бургеры", "мясо по-итальянски", "шашлычки")
 
 
-@food_router.message(F.text.lower().in_(food_country))
-async def show_country(message: types.Message):
-    country = message.text
-    print("Пользователь нажал на кнопку", country)
+@restaurant_router.message(F.text.lower().in_(dish_categories))
+async def show_dish_by_category(message: types.Message):
+    category = message.text
+    print("Пользователь нажал на кнопку", category)
     data = await database.fetch(
-        """SELECT * FROM food 
-        INNER JOIN countries ON food.country_id = countries.id 
-        WHERE countries.name = ?""",
-        (country,)
+        """SELECT * FROM dishes 
+        INNER JOIN categories ON dishes.category = categories.id 
+        WHERE categories.name = ?""",
+        (category,)
     )
     pprint(data)
     if not data:
-        await message.answer("Ничего не найдено")
+        await message.answer("В наличии таких блюд пока нет, приносим извинения")
         return
     kb = types.ReplyKeyboardRemove()
-    await message.answer(f"Виды блюд {country}:", reply_markup=kb)
-    for food in data:
-        image = types.FSInputFile(food.get("picture"))
-        await message.answer_photo(
-            photo=image,
-            caption=f"{food['name']} - {food['country']}\nЦена: {food['price']} сом")
+    await message.answer(f"Все блюда {category}:", reply_markup=kb)
+    for dish in data:
+        # image = types.FSInputFile(dish.get("picture"))
+        await message.answer(text=f"{dish['name']}\nСтрана производитель - {dish['country']}\nЦена: {dish['price']} сом")

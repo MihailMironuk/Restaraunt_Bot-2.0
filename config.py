@@ -4,10 +4,20 @@ from os import getenv
 from database.database import Database
 from pathlib import Path
 
+load_dotenv()
 database = Database(Path('__file__').parent / 'db.sqlite')
 
-load_dotenv()
-bot = Bot(token=getenv("BOT_TOKEN"))
+dev = getenv("DEV", 0)
+if not dev:
+    from aiogram.client.session.aiohttp import AiohttpSession
+
+    print("Started on serve")
+    session = AiohttpSession(proxy=getenv("PROXY"))
+    bot = Bot(token=getenv("BOT_TOKEN"), session=session)
+else:
+    print("Started on dev")
+    bot = Bot(token=getenv("BOT_TOKEN"))
+
 dp = Dispatcher()
 
 

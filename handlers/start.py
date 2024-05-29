@@ -23,6 +23,10 @@ async def start_cmd(message: types.Message):
                          f" здесь вы можете заказать себе покушать и просто хорошо провести время!"
                          f" Снизу навигация по нашим услугам.",  reply_markup=kb)
 
+    # await message.reply(f"Привет, {message.from_user.first_name}")
+    # crawler = HouseKgCrawler()
+    # links = await crawler.get_links_from_all_pages()
+
 
 @start_router.callback_query(F.data == "about_us")
 async def about_us(callback: types.CallbackQuery):

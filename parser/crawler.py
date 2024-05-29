@@ -1,11 +1,16 @@
 import asyncio
-from httpx import AsyncClient
+import httpx
 from parsel import Selector
 
 
 class HouseKgCrawler:
-    MAIN_URL = "https://www.house.kg/snyat"
+    MAIN_URL = "https://www.house.kg/snyat-kvartiru"
     BASE_URL = "https://www.house.kg"
+
+    async def get_page(self, url: str, client: httpx.AsyncClient):
+        response = await client.get(url)
+        print("Status code:", response.status_code, "url:", url)
+        return response.text
 
     def get_links(self, html):
         selector = Selector(text=html)
@@ -14,7 +19,7 @@ class HouseKgCrawler:
         return links
 
     async def get_links_from_all_pages(self):
-        async with AsyncClient() as client:
+        async with httpx.AsyncClient() as client:
             tasks = []
             for i in range(1, 11):
                 url = f"{self.MAIN_URL}?page={i}"
@@ -29,7 +34,8 @@ class HouseKgCrawler:
 
             return all_links
 
-    async def get_page(self, url: str, client: AsyncClient):
-        response = await client.get(url)
-        print("Status:", response.status_code, "url:", url)
-        return response.text
+
+if __name__ == "__main__":
+    crawler = HouseKgCrawler()
+    links = asyncio.run(crawler.get_links_from_all_pages())
+    print(links)

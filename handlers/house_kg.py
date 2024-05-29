@@ -1,5 +1,4 @@
-from aiogram import types
-from aiogram.dispatcher import Dispatcher
+from aiogram import types, Dispatcher
 from parser.crawler import HouseKgCrawler
 
 
@@ -21,3 +20,7 @@ def setup_commands(dp: Dispatcher):
             resize_keyboard=True
         )
         await message.answer(text="Нажмите кнопку для запуска парсера", reply_markup=kb)
+
+    @dp.message_handler(lambda message: message.text == "Парсер")
+    async def handle_crawler_button(message: types.Message):
+        await start_crawler(message)
